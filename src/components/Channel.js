@@ -9,8 +9,15 @@ class Channel extends React.Component {
   render() {
     return(
       <div className="channel">
-        <p>Channel: {this.channelInfo.channelName}</p>
-        <p>Status: {this.channelInfo.status}</p>
+        <div className="channel-avatar">
+          <a href={this.channelInfo.links.self}>
+            <img src={this.channelInfo.logoSrc}/>
+          </a>
+        </div>
+        <div className="channel-info">
+          <h2><a href={this.channelInfo.links.self}>{this.channelInfo.channelName}</a></h2>
+          <p>Status: {this.channelInfo.status}</p>
+        </div>
       </div>
       )
   }

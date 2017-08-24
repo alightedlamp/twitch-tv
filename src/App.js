@@ -14,7 +14,7 @@ class App extends Component {
 
     this.state = {
       channels: [],
-      users: []
+      streams: []
     }
   }
 
@@ -22,24 +22,26 @@ class App extends Component {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
 
     let channels = this.state.channels;
-    let callUrl = '';
+    let streams = this.state.streams;
+
     let self = this; // this seems ugly, but works
 
-    function getData(callUrl, channels) {
+    function getChannelData(callUrl, channels) {
 
       jsonp(callUrl, null, function (err, data) {
-        if (err) {
-          console.error(err.message);
-        }
+        if (err) console.error(err.message);
         else {
+          console.log(data);
           let channelObj = {}
 
           channelObj.channelName = data.display_name;
           channelObj.game = data.game;
+          channelObj.links = data._links;
           channelObj.status = data.status;
           channelObj.updated = data.updated_at;
           channelObj.logoSrc = data.logo;
           channelObj.bannerSrc = data.bannerSrc;
+          channelObj.bannerColor = data.profile_banner_background_color;
 
           channels.push(channelObj);
 
@@ -48,10 +50,30 @@ class App extends Component {
       });
     }
 
+    function getStreamData(callUrl) {
+      jsonp(callUrl, null, function(err, data) {
+        if (err) console.log(err);
+        else {
+          console.log(data);
+
+          if (data.stream) {
+            let streamObj = {}
+
+            streamObj.type = data.stream.stream_type;
+            streamObj.links = data.stream._links;
+
+            streams.push(streamObj);
+
+            self.setState({ streams });
+          }
+        }
+      })
+    }
+
     if (Array.isArray(channel)) {
       for (var i = 0; i < channel.length; i++) {
-        callUrl = `${baseUrl}/channels/${channel[i]}`;
-        getData(callUrl, channels);
+        getChannelData(`${baseUrl}/channels/${channel[i]}`, channels);
+        getStreamData(`${baseUrl}/streams/${channel[i]}`, channels);
       }
     }
   }
@@ -71,7 +93,9 @@ class App extends Component {
         <SearchBar />
         <StatusBar />
         <div className="channel-list">
-          {this.state.channels.map(channel => <Channel key={channel.updated} channelInfo={channel}/>)}
+          {this.state.channels.map(channel => {
+            return <Channel key={channel.updated} channelInfo={channel}/>
+          })}
         </div>
       </div>
     );

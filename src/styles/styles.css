@@ -10,8 +10,24 @@ body {
   background-color: white;
   padding: 1em; }
 
+.status-bar {
+  margin: 1em 0;
+  display: flex;
+  justify-content: space-around; }
+
 .channel {
-  border-bottom: 1px solid black;
+  display: flex;
   padding: 1em 0; }
+  .channel h2 {
+    margin: 0; }
+    .channel h2 a {
+      text-decoration: none;
+      color: green; }
+
+.channel-avatar {
+  margin: 0 .75em 0 0; }
+
+.channel-avatar img {
+  width: 100px; }
 
 /*# sourceMappingURL=styles.css.map */

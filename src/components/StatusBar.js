@@ -1,13 +1,18 @@
 import React from 'react';
 
-class StatusFilter extends React.Component {
+class StatusBar extends React.Component {
   render() {
     return(
-      <div className="search-bar">
-        <p>Status bar here</p>
+      <div className="status-bar">
+        <div>
+          Online
+        </div>
+        <div>
+          Offline
+        </div>
       </div>
       )
   }
 }
 
-export default StatusFilter;
+export default StatusBar;
