@@ -1,6 +1,6 @@
 import React from 'react';
 
-class StatusBar extends React.Component {
+class StatusFilter extends React.Component {
   render() {
     return(
       <div className="search-bar">
@@ -10,4 +10,4 @@ class StatusBar extends React.Component {
   }
 }
 
-export default StatusBar;
+export default StatusFilter;
