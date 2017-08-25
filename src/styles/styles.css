@@ -4,16 +4,26 @@ body {
   padding: 0;
   background-color: lightgreen; }
 
+p {
+  font-size: .9em; }
+
 .App {
   width: 600px;
   margin: 0 auto;
   background-color: white;
   padding: 1em; }
 
-.status-bar {
-  margin: 1em 0;
+.controls {
+  margin: 2em 0;
   display: flex;
-  justify-content: space-around; }
+  justify-content: space-between; }
+
+.options ul {
+  list-style-type: none; }
+
+.options ul li {
+  margin: 0;
+  padding: 0; }
 
 .channel {
   display: flex;

@@ -90,8 +90,10 @@ class App extends Component {
         <div className="header">
           <h1 className="title">Twitch TV Stream</h1>
         </div>
-        <SearchBar />
-        <StatusBar />
+        <div className="controls">
+          <SearchBar />
+          <StatusBar />
+        </div>
         <div className="channel-list">
           {this.state.channels.map(channel => {
             return <Channel key={channel.updated} channelInfo={channel}/>

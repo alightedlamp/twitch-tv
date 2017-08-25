@@ -11,7 +11,7 @@ class Channel extends React.Component {
       <div className="channel">
         <div className="channel-avatar">
           <a href={this.channelInfo.links.self}>
-            <img src={this.channelInfo.logoSrc}/>
+            <img src={this.channelInfo.logoSrc} alt="Channel Logo"/>
           </a>
         </div>
         <div className="channel-info">
