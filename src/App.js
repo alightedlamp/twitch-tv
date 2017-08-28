@@ -3,35 +3,31 @@ import jsonp from 'jsonp';
 import './styles/styles.css';
 
 import SearchBar from './components/SearchBar';
-import StatusBar from './components/StatusBar';
-import Channel from './components/Channel';
+import Channels from './components/Channels';
 
 class App extends Component {
   constructor() {
     super();
 
-    this.getChannels = this.getChannels.bind(this);
-
     this.state = {
       channels: [],
-      streams: []
+      streams: [],
+      statusChoice: 'All'
     }
-  }
 
+    this.getChannels = this.getChannels.bind(this);
+  }
   getChannels(channel) {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
 
     let channels = this.state.channels;
     let streams = this.state.streams;
 
-    let self = this; // this seems ugly, but works
-
-    function getChannelData(callUrl, channels) {
-
+    function getChannelData(callUrl) {
       jsonp(callUrl, null, function (err, data) {
         if (err) console.error(err.message);
         else {
-          console.log(data);
+          // console.log(data);
           let channelObj = {}
 
           channelObj.channelName = data.display_name;
@@ -44,42 +40,49 @@ class App extends Component {
           channelObj.bannerColor = data.profile_banner_background_color;
 
           channels.push(channelObj);
-
-          self.setState({ channels });
         }
       });
     }
 
-    function getStreamData(callUrl) {
+    function getStreamData(callUrl, i) {
       jsonp(callUrl, null, function(err, data) {
         if (err) console.log(err);
         else {
-          console.log(data);
-
+          // console.log(data);
           if (data.stream) {
             let streamObj = {}
 
+            streamObj.game = data.stream.game;
             streamObj.type = data.stream.stream_type;
             streamObj.links = data.stream._links;
 
             streams.push(streamObj);
 
-            self.setState({ streams });
+            if (channels[i]) {
+              channels[i].channelStatus = 'Online';
+            }
+          }
+          else {
+            if (channels[i]) {
+              channels[i].channelStatus = 'Offline';
+            }
           }
         }
-      })
+      });
     }
 
     if (Array.isArray(channel)) {
       for (var i = 0; i < channel.length; i++) {
-        getChannelData(`${baseUrl}/channels/${channel[i]}`, channels);
-        getStreamData(`${baseUrl}/streams/${channel[i]}`, channels);
+        getChannelData(`${baseUrl}/channels/${channel[i]}`);
+        getStreamData(`${baseUrl}/streams/${channel[i]}`, i);
       }
     }
+    // Why is this not rerendering component?
+    this.setState({ channels, streams });
   }
 
   componentDidMount() {
-    const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+    const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
 
     this.getChannels(defaultChannels);
   }
@@ -92,12 +95,9 @@ class App extends Component {
         </div>
         <div className="controls">
           <SearchBar />
-          <StatusBar />
         </div>
-        <div className="channel-list">
-          {this.state.channels.map(channel => {
-            return <Channel key={channel.updated} channelInfo={channel}/>
-          })}
+        <div className="channels">
+          <Channels channels={this.state.channels} streams={this.state.streams} />
         </div>
       </div>
     );

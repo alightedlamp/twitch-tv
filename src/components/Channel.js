@@ -1,4 +1,6 @@
 import React from 'react';
+import {Card, CardHeader} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -8,17 +10,17 @@ class Channel extends React.Component {
   }
   render() {
     return(
-      <div className="channel">
-        <div className="channel-avatar">
-          <a href={this.channelInfo.links.self}>
-            <img src={this.channelInfo.logoSrc} alt="Channel Logo"/>
-          </a>
-        </div>
-        <div className="channel-info">
-          <h2><a href={this.channelInfo.links.self}>{this.channelInfo.channelName}</a></h2>
-          <p>Status: {this.channelInfo.status}</p>
-        </div>
-      </div>
+      <Card>
+        <CardHeader
+          title={this.channelInfo.channelName}
+          subtitle={this.channelInfo.status}
+          avatar={this.channelInfo.logoSrc}
+        />
+        <FlatButton
+          label={`View - ${this.channelInfo.channelStatus}`}
+          href={this.channelInfo.links.self}
+        />
+      </Card>
       )
   }
 }

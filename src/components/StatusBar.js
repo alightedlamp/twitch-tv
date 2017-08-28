@@ -9,7 +9,7 @@ class StatusBar extends React.Component {
       <div className="status-bar">
         <Dropdown text="Status">
           <Dropdown.Menu>
-            {statusOptions.map(item => <Dropdown.Item text={item} key={item} />)}
+            {statusOptions.map(item => <Dropdown.Item text={item} key={item} onClick={() => this.props.setStatus(item)}/>)}
           </Dropdown.Menu>
         </Dropdown>
       </div>
