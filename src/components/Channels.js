@@ -23,17 +23,18 @@ class Channels extends React.Component {
     let activeTab = tab ? tab.props.label : this.state.statusChoice;
     let channelComponentsArr = [];
 
-    if (activeTab == 'All') {
-      channelComponentsArr = this.channels.map(channel => <Channel key={channel.updated} channelInfo={channel} />);
+    if (activeTab === 'All') {
+      channelComponentsArr = this.channels.map(channel => {
+        return <Channel key={channel.updated} channelInfo={channel} />
+      });
     }
     else {
-      channelComponentsArr = this.channels.forEach(channel => {
-        if (channel.channelStatus == activeTab) {
+      channelComponentsArr = this.channels.map(channel => {
+        if (channel.channelStatus === activeTab) {
           return <Channel key={channel.updated} channelInfo={channel} />;
         }
       });
     }
-    // channelComponentsArr is empty - WHY? this.channels isn't!
     this.setState({ channelComponents: channelComponentsArr });
   }
   handleUpdate(tab) {
