@@ -23,11 +23,12 @@ class App extends Component {
     let channels = this.state.channels;
     let streams = this.state.streams;
 
-    function getChannelData(callUrl) {
+    function getChannelData(channel) {
+      let callUrl = `${baseUrl}/channels/${channel}`;
+
       jsonp(callUrl, null, function (err, data) {
         if (err) console.error(err.message);
         else {
-          // console.log(data);
           let channelObj = {}
 
           channelObj.channelName = data.display_name;
@@ -39,52 +40,46 @@ class App extends Component {
           channelObj.bannerSrc = data.bannerSrc;
           channelObj.bannerColor = data.profile_banner_background_color;
 
+          // See if stream is available
+          let callUrl = `${baseUrl}/streams/${channel}`
+
+          jsonp(callUrl, null, function(err, data) {
+            if (err) console.log(err);
+            else {
+              if (data.stream) {
+                let streamObj = {}
+
+                streamObj.game = data.stream.game;
+                streamObj.type = data.stream.stream_type;
+                streamObj.links = data.stream._links;
+
+                streams.push(streamObj);
+
+                channelObj.channelStatus = 'Online'
+              }
+              else {
+                channelObj.channelStatus = 'Offline'
+              }
+            }
+          });
           channels.push(channelObj);
-        }
-      });
-    }
-
-    function getStreamData(callUrl, i) {
-      jsonp(callUrl, null, function(err, data) {
-        if (err) console.log(err);
-        else {
-          // console.log(data);
-          if (data.stream) {
-            let streamObj = {}
-
-            streamObj.game = data.stream.game;
-            streamObj.type = data.stream.stream_type;
-            streamObj.links = data.stream._links;
-
-            streams.push(streamObj);
-
-            if (channels[i]) {
-              channels[i].channelStatus = 'Online';
-            }
-          }
-          else {
-            if (channels[i]) {
-              channels[i].channelStatus = 'Offline';
-            }
-          }
         }
       });
     }
 
     if (Array.isArray(channel)) {
       for (var i = 0; i < channel.length; i++) {
-        getChannelData(`${baseUrl}/channels/${channel[i]}`);
-        getStreamData(`${baseUrl}/streams/${channel[i]}`, i);
+        getChannelData(channel[i]);
       }
     }
-    // Why is this not rerendering component?
-    this.setState({ channels, streams });
+
+    return [channels, streams];
   }
 
   componentDidMount() {
     const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
-
-    this.getChannels(defaultChannels);
+    let [channels, streams] = this.getChannels(defaultChannels);
+    this.setState({ channels, streams });
   }
 
   render() {
