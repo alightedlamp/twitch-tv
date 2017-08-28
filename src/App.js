@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import jsonp from 'jsonp';
 import './styles/styles.css';
 
-import SearchBar from './components/SearchBar';
+import AppBar from 'material-ui/AppBar';
+import SearchBar from 'material-ui-search-bar';
+
 import Channels from './components/Channels';
 
 class App extends Component {
@@ -15,7 +17,23 @@ class App extends Component {
       statusChoice: 'All'
     }
 
+    this.searchChannels = this.searchChannels.bind(this);
     this.getChannels = this.getChannels.bind(this);
+  }
+  searchChannels(value) {
+    console.log('searching for': value)
+
+    const baseUrl = 'https://api.twitch.tv/kraken/search/channels?query=';
+    let query = encodeURIComponent(value);
+
+    let callUrl = `${baseUrl}${query}`;
+
+    jsonp(callUrl, null, function(err, data) {
+      if (err) console.log(err);
+      else {
+        console.log(data);
+      }
+    })
   }
   getChannels(channel) {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
@@ -37,7 +55,7 @@ class App extends Component {
           channelObj.status = data.status;
           channelObj.updated = data.updated_at;
           channelObj.logoSrc = data.logo;
-          channelObj.bannerSrc = data.bannerSrc;
+          channelObj.bannerSrc = data.profile_banner;
           channelObj.bannerColor = data.profile_banner_background_color;
 
           // See if stream is available
@@ -72,27 +90,37 @@ class App extends Component {
         getChannelData(channel[i]);
       }
     }
+    else {
+      getChannelData(channel[i]);
+    }
 
-    return [channels, streams];
+    this.setState({ channels, streams });
   }
 
   componentDidMount() {
     const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
-    let [channels, streams] = this.getChannels(defaultChannels);
-    this.setState({ channels, streams });
+    this.getChannels(defaultChannels);
   }
 
   render() {
     return (
       <div className="App">
-        <div className="header">
-          <h1 className="title">Twitch TV Stream</h1>
-        </div>
-        <div className="controls">
-          <SearchBar />
-        </div>
-        <div className="channels">
-          <Channels channels={this.state.channels} streams={this.state.streams} />
+        <AppBar
+          title="Twitch TV Stream"
+        />
+        <div className="App-Content">
+          <div className="controls">
+            <SearchBar
+              onChange={this.searchChannels(this.value)}
+              onRequestSearch={this.searchChannels(this.value)}
+              style={{
+                width: '100%'
+              }}
+            />
+          </div>
+          <div className="channels">
+            <Channels channels={this.state.channels} streams={this.state.streams} />
+          </div>
         </div>
       </div>
     );

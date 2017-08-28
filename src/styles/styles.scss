@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: black;
+  // background-color: black;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -11,9 +11,12 @@ p {
 }
 
 .App {
-  width: 600px;
   margin: 0 auto;
   background-color: white;
+}
+.App-Content {
+  width: 600px;
+  margin: 0 auto;
   padding: 1em;
 }
 .controls {
@@ -21,18 +24,15 @@ p {
   display: flex;
   justify-content: space-between;
 }
-.status-bar {}
-.options ul {
-  list-style-type: none;
+.search-bar {
+  width: 100%;
 }
-.options ul li {
-  margin: 0;
-  padding: 0;
+.default-banner {
+  height: 55px;
+  width: 100%;
+  background-color: purple;
 }
-
 .channel {
-  display: flex;
-  // border-bottom: 1px solid black;
   padding: 1em 0;
 
   h2 {
@@ -49,4 +49,7 @@ p {
 }
 .channel-avatar img {
   width: 100px;
+}
+.cursor {
+  cursor: pointer;
 }
