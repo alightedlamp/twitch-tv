@@ -1,7 +1,7 @@
 import {
   deepPurple300, deepPurple500, deepPurple700,
   red300, red500, red700,
-  grey100, grey300, grey400, grey500,
+  grey300,
   white, darkBlack, fullBlack,
 } from 'material-ui/styles/colors';
 import {fade} from 'material-ui/utils/colorManipulator';
@@ -26,6 +26,13 @@ const twitchTheme = getMuiTheme({
     pickerHeaderColor: deepPurple500,
     clockCircleColor: fade(darkBlack, 0.07),
     shadowColor: fullBlack,
+  },
+  appBar: {
+    color: deepPurple500,
+    boxShadow: '0 3px 10px #888'
+  },
+  tabs: {
+    backgroundColor: deepPurple300
   }
 });
 

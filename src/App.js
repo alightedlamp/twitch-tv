@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import jsonp from 'jsonp';
+import JSONP from 'jsonp';
 import './styles/styles.css';
 
 import AppBar from 'material-ui/AppBar';
-import SearchBar from 'material-ui-search-bar';
+import SearchBar from './components/SearchBar';
 
 import Channels from './components/Channels';
 
@@ -14,26 +14,11 @@ class App extends Component {
     this.state = {
       channels: [],
       streams: [],
-      statusChoice: 'All'
+      statusChoice: 'All',
+      searching: true
     }
 
-    this.searchChannels = this.searchChannels.bind(this);
     this.getChannels = this.getChannels.bind(this);
-  }
-  searchChannels(value) {
-    console.log('searching for': value)
-
-    const baseUrl = 'https://api.twitch.tv/kraken/search/channels?query=';
-    let query = encodeURIComponent(value);
-
-    let callUrl = `${baseUrl}${query}`;
-
-    jsonp(callUrl, null, function(err, data) {
-      if (err) console.log(err);
-      else {
-        console.log(data);
-      }
-    })
   }
   getChannels(channel) {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
@@ -44,7 +29,7 @@ class App extends Component {
     function getChannelData(channel) {
       let callUrl = `${baseUrl}/channels/${channel}`;
 
-      jsonp(callUrl, null, function (err, data) {
+      JSONP(callUrl, null, function (err, data) {
         if (err) console.error(err.message);
         else {
           let channelObj = {}
@@ -61,7 +46,7 @@ class App extends Component {
           // See if stream is available
           let callUrl = `${baseUrl}/streams/${channel}`
 
-          jsonp(callUrl, null, function(err, data) {
+          JSONP(callUrl, null, function(err, data) {
             if (err) console.log(err);
             else {
               if (data.stream) {
@@ -105,19 +90,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <AppBar
-          title="Twitch TV Stream"
-        />
+        <AppBar title="Twitch TV Stream" />
+        <div className="search-bar">
+          <SearchBar />
+        </div>
         <div className="App-Content">
-          <div className="controls">
-            <SearchBar
-              onChange={this.searchChannels(this.value)}
-              onRequestSearch={this.searchChannels(this.value)}
-              style={{
-                width: '100%'
-              }}
-            />
-          </div>
           <div className="channels">
             <Channels channels={this.state.channels} streams={this.state.streams} />
           </div>
