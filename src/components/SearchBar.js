@@ -47,7 +47,6 @@ class SearchBar extends React.Component {
           self.setState({
             dataSource: retrievedSearchTerms
           });
-          console.log(self.state);
         })
         .catch(function(error) {
           console.log(error);
@@ -55,9 +54,7 @@ class SearchBar extends React.Component {
     }
   }
   listResults() {
-    const self = this;
-    // this needs to pass list results to channels... somehow
-    console.log(self.state.dataSource);
+    this.getChannels(this.state.dataSource);
   }
   render() {
     return(
@@ -67,7 +64,7 @@ class SearchBar extends React.Component {
               hintText="Search"
               dataSource={this.state.dataSource}
               onUpdateInput={this.onUpdateInput}
-              onNewRequest={this.getChannels}
+              onNewRequest={this.listResults}
               fullWidth={true}
             />
           </div>

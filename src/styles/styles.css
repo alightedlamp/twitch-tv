@@ -2,14 +2,14 @@ html,
 body {
   margin: 0;
   padding: 0;
+  background-color: #eee;
   font-family: 'Roboto', sans-serif; }
 
 p {
   font-size: .9em; }
 
 .App {
-  margin: 0 auto;
-  background-color: white; }
+  margin: 0 auto; }
 
 .App-Content {
   max-width: 600px;
@@ -22,6 +22,7 @@ p {
   justify-content: space-between; }
 
 .search-bar {
+  background-color: white;
   padding: 1em;
   box-shadow: 0 3px 10px #888; }
 

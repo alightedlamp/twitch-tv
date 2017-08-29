@@ -76,7 +76,7 @@ class App extends Component {
       }
     }
     else {
-      getChannelData(channel[i]);
+      getChannelData(channel);
     }
 
     this.setState({ channels, streams });
@@ -96,7 +96,7 @@ class App extends Component {
         </div>
         <div className="App-Content">
           <div className="channels">
-            <Channels channels={this.state.channels} streams={this.state.streams} />
+            <Channels channels={this.state.channels} streams={this.state.streams} defaultTab={this.state.statusChoice} />
           </div>
         </div>
       </div>
