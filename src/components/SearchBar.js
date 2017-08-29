@@ -2,7 +2,7 @@ import React from 'react';
 import { AutoComplete } from 'material-ui';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import JSONP from 'jsonp';
+import axios from 'axios';
 
 const CLIENT_ID='?x9e6ecshjrf9sx1t9m1td07n9m2hgj';
 const BASE_URL = 'https://api.twitch.tv/kraken/search/channels?query='
@@ -11,11 +11,14 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onUpdateInput = this.onUpdateInput.bind(this);
     this.state = {
       dataSource: [],
       inputValue: ''
     }
+
+    this.onUpdateInput = this.onUpdateInput.bind(this);
+    this.listResults = this.listResults.bind(this);
+    this.getChannels = this.props.getChannels;
   }
   onUpdateInput(inputValue) {
     const self = this;
@@ -27,31 +30,34 @@ class SearchBar extends React.Component {
   }
   searchChannels() {
     const self = this;
-    const url =  BASE_URL + this.state.inputValue;
+    const url = BASE_URL + this.state.inputValue;
 
     if(this.state.inputValue !== '') {
-      JSONP(url, {
-          param: `client_id=${CLIENT_ID}`,
-          timeout: 5000
-      }, function(err, data) {
-        let searchResults, retrievedSearchTerms;
+      axios.get(url, {
+          params: {
+            client_id: CLIENT_ID
+          }
+        })
+        .then(function(data) {
+          let searchResults, retrievedSearchTerms;
+          searchResults = data.data.channels;
 
-        if (err) console.log(err);
-        else {
-          console.log(data);
-          searchResults = data[1];
-
-          retrievedSearchTerms = searchResults.map(function(result) {
-            return result.channel.name;
-          });
+          retrievedSearchTerms = searchResults.map(channel => channel.name);
 
           self.setState({
             dataSource: retrievedSearchTerms
           });
-        }
-      });
-
+          console.log(self.state);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
+  }
+  listResults() {
+    const self = this;
+    // this needs to pass list results to channels... somehow
+    console.log(self.state.dataSource);
   }
   render() {
     return(
@@ -61,6 +67,7 @@ class SearchBar extends React.Component {
               hintText="Search"
               dataSource={this.state.dataSource}
               onUpdateInput={this.onUpdateInput}
+              onNewRequest={this.getChannels}
               fullWidth={true}
             />
           </div>

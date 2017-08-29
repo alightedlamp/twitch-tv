@@ -92,7 +92,7 @@ class App extends Component {
       <div className="App">
         <AppBar title="Twitch TV Stream" />
         <div className="search-bar">
-          <SearchBar />
+          <SearchBar getChannels={this.getChannels} />
         </div>
         <div className="App-Content">
           <div className="channels">
