@@ -11,6 +11,13 @@ class Channel extends React.Component {
     this.statusColor = this.props.channelInfo.channelStatus === 'Online' ? { color: 'green' } : { color: '#888' };
   }
   render() {
+    const baseUrl = 'http://twitch.tv/';
+    const styles = {
+      viewButton: {
+        color: this.statusColor
+      }
+    }
+
     let banner = null;
     if (this.channelInfo.bannerSrc) {
       banner = <img src={this.channelInfo.bannerSrc} alt="Channel Banner"/>;
@@ -18,6 +25,7 @@ class Channel extends React.Component {
     else {
       banner = <div className="default-banner"></div>;
     }
+
     return(
       <Card>
         <CardHeader
@@ -32,7 +40,8 @@ class Channel extends React.Component {
         </CardMedia>
         <FlatButton
           label={`View - ${this.channelInfo.channelStatus}`}
-          href={this.channelInfo.links.self}
+          href={`${baseUrl}${this.channelInfo.channelName}`}
+          style={styles.viewButton}
         />
       </Card>
       )

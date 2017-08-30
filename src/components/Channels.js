@@ -13,9 +13,11 @@ class Channels extends React.Component {
     this.renderChannels = this.renderChannels.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
 
+    this.defaultTab = this.props.defaultTab;
+
     this.state = {
       channelComponents: [],
-      statusChoice: 'All'
+      statusChoice: ''
     }
   }
   renderChannels(tab) {
@@ -44,6 +46,9 @@ class Channels extends React.Component {
   }
   componentDidMount() {
     this.renderChannels();
+    if (this.state.statusChoice.length === 0) {
+      this.setState({ statusChoice: this.defaultTab });
+    }
   }
   render() {
     return(
