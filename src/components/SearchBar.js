@@ -1,7 +1,5 @@
 import React from 'react';
 import { AutoComplete } from 'material-ui';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
 
 const CLIENT_ID='?x9e6ecshjrf9sx1t9m1td07n9m2hgj';
@@ -58,17 +56,15 @@ class SearchBar extends React.Component {
   }
   render() {
     return(
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <div>
-            <AutoComplete
-              hintText="Search"
-              dataSource={this.state.dataSource}
-              onUpdateInput={this.onUpdateInput}
-              onNewRequest={this.listResults}
-              fullWidth={true}
-            />
-          </div>
-        </MuiThemeProvider>
+      <div>
+        <AutoComplete
+          hintText="Search"
+          dataSource={this.state.dataSource}
+          onUpdateInput={this.onUpdateInput}
+          onNewRequest={this.listResults}
+          fullWidth={true}
+        />
+      </div>
       )
   }
 }

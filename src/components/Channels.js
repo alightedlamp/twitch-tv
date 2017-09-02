@@ -9,45 +9,34 @@ class Channels extends React.Component {
 
     this.channels = this.props.channels;
     this.streams = this.props.streams;
-
-    this.renderChannels = this.renderChannels.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-
-    this.defaultTab = this.props.defaultTab;
+    this.selectedTab = this.props.selectedTab;
 
     this.state = {
       channelComponents: [],
-      statusChoice: ''
+      selectedTab: this.selectedTab
     }
   }
-  renderChannels(tab) {
-    let activeTab = tab ? tab.props.label : this.state.statusChoice;
-    let channelComponentsArr = [];
-
-    if (activeTab === 'All') {
-      channelComponentsArr = this.channels.map(channel => {
-        return <Channel key={channel.updated} channelInfo={channel} />
-      });
-    }
-    else {
-      channelComponentsArr = this.channels.map(channel => {
-        if (channel.channelStatus === activeTab) {
-          return <Channel key={channel.updated} channelInfo={channel} />;
-        }
-      });
-    }
-    this.setState({ channelComponents: channelComponentsArr });
+  renderChannels = (tab) => {
+    let activeTab = tab ? tab.props.label : this.state.selectedTab;
+    let channelComponents = this.channels.map(channel => {
+      if (channel.channelStatus === activeTab || activeTab === 'All') {
+        return <Channel key={channel.updated} channelInfo={channel} />;
+      }
+    });
+    this.setState({ channelComponents });
   }
-  handleUpdate(tab) {
-    if (tab.props.label !== this.state.statusChoice) {
-      this.setState({ statusChoice: tab.props.label });
+  handleUpdate = (tab) => {
+    if (tab.props.label !== this.state.selectedTab) {
+      this.setState({ selectedTab: tab.props.label });
       this.renderChannels(tab);
     }
   }
   componentDidMount() {
-    this.renderChannels();
-    if (this.state.statusChoice.length === 0) {
-      this.setState({ statusChoice: this.defaultTab });
+    if (this.channels.length) {
+      this.renderChannels();
+    }
+    else {
+      console.log('channels list is empty')
     }
   }
   render() {

@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       channels: [],
       streams: [],
-      statusChoice: 'All',
+      selectedTab: 'All',
       searching: true
     }
 
@@ -92,11 +92,11 @@ class App extends Component {
       <div className="App">
         <AppBar title="Twitch TV Stream" />
         <div className="search-bar">
-          <SearchBar getChannels={this.getChannels} />
+          <SearchBar getChannels={this.getChannels} selectedTab={this.state.selectedTab} />
         </div>
         <div className="App-Content">
           <div className="channels">
-            <Channels channels={this.state.channels} streams={this.state.streams} defaultTab={this.state.statusChoice} />
+            <Channels channels={this.state.channels} streams={this.state.streams} selectedTab={this.state.selectedTab} />
           </div>
         </div>
       </div>
