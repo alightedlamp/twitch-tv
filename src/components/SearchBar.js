@@ -9,15 +9,18 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.getChannels = this.props.getChannels;
+
     this.state = {
       dataSource: [],
-      inputValue: ''
+      inputValue: '',
+      selectedTab: this.props.selectedTab
     }
 
     this.onUpdateInput = this.onUpdateInput.bind(this);
-    this.listResults = this.listResults.bind(this);
-    this.getChannels = this.props.getChannels;
+    this.searchChannels = this.searchChannels.bind(this);
   }
+
   onUpdateInput(inputValue) {
     const self = this;
     this.setState({
@@ -26,11 +29,12 @@ class SearchBar extends React.Component {
       self.searchChannels();
     });
   }
+
   searchChannels() {
     const self = this;
     const url = BASE_URL + this.state.inputValue;
 
-    if(this.state.inputValue !== '') {
+    if (this.state.inputValue !== '') {
       axios.get(url, {
           params: {
             client_id: CLIENT_ID
@@ -51,9 +55,7 @@ class SearchBar extends React.Component {
         });
     }
   }
-  listResults() {
-    this.getChannels(this.state.dataSource);
-  }
+
   render() {
     return(
       <div>
@@ -61,7 +63,7 @@ class SearchBar extends React.Component {
           hintText="Search"
           dataSource={this.state.dataSource}
           onUpdateInput={this.onUpdateInput}
-          onNewRequest={this.listResults}
+          onNewRequest={() => this.getChannels(this.state.dataSource)}
           fullWidth={true}
         />
       </div>

@@ -3,6 +3,7 @@ import JSONP from 'jsonp';
 import './styles/styles.css';
 
 import AppBar from 'material-ui/AppBar';
+import TabBar from './components/TabBar';
 import SearchBar from './components/SearchBar';
 
 import Channels from './components/Channels';
@@ -14,17 +15,21 @@ class App extends Component {
     this.state = {
       channels: [],
       streams: [],
-      selectedTab: 'All',
-      searching: true
+      selectedTab: ''
     }
 
     this.getChannels = this.getChannels.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.loadDefault = this.loadDefault.bind(this);
+
+    this.defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
   }
-  getChannels(channel) {
+
+  getChannels(channelsToDisplay) {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
 
-    let channels = this.state.channels;
-    let streams = this.state.streams;
+    let channels = [];
+    let streams = [];
 
     function getChannelData(channel) {
       let callUrl = `${baseUrl}/channels/${channel}`;
@@ -70,21 +75,31 @@ class App extends Component {
       });
     }
 
-    if (Array.isArray(channel)) {
-      for (var i = 0; i < channel.length; i++) {
-        getChannelData(channel[i]);
+    try {
+      console.log('getting channel data');
+      for (var i = 0; i < channelsToDisplay.length; i++) {
+        getChannelData(channelsToDisplay[i]);
       }
     }
-    else {
-      getChannelData(channel);
+    catch (e) {
+      if (e instanceof TypeError) {
+        getChannelData(channelsToDisplay);
+      }
+      else {
+        console.log('invalid data input');
+      }
     }
-
     this.setState({ channels, streams });
   }
 
-  componentDidMount() {
-    const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
-    this.getChannels(defaultChannels);
+  loadDefault() {
+    this.getChannels(this.defaultChannels);
+  }
+
+  handleUpdate(tab) {
+    if (tab !== this.state.selectedTab) {
+      this.setState({ selectedTab: tab });
+    }
   }
 
   render() {
@@ -92,11 +107,23 @@ class App extends Component {
       <div className="App">
         <AppBar title="Twitch TV Stream" />
         <div className="search-bar">
-          <SearchBar getChannels={this.getChannels} selectedTab={this.state.selectedTab} />
+          <SearchBar
+            getChannels={this.getChannels}
+            selectedTab={this.selectedTab}
+          />
         </div>
         <div className="App-Content">
+          <TabBar
+            handleUpdate={this.handleUpdate}
+            selectedTab={this.selectedTab}
+          />
           <div className="channels">
-            <Channels channels={this.state.channels} streams={this.state.streams} selectedTab={this.state.selectedTab} />
+            <Channels
+              getChannels={this.getChannels}
+              loadDefault={this.loadDefault}
+              selectedTab={this.state.selectedTab}
+              channels={this.state.channels}
+            />
           </div>
         </div>
       </div>
