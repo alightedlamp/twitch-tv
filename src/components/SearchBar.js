@@ -14,7 +14,6 @@ class SearchBar extends React.Component {
     this.state = {
       dataSource: [],
       inputValue: '',
-      selectedTab: this.props.selectedTab
     }
 
     this.onUpdateInput = this.onUpdateInput.bind(this);

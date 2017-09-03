@@ -4,7 +4,8 @@ import Channel from './Channel';
 class Channels extends React.Component {
   componentDidMount() {
     if (this.props.channels.length === 0) {
-      this.props.loadDefault();
+      const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
+      this.props.getChannels(defaultChannels);
     }
   }
 

@@ -20,13 +20,11 @@ class App extends Component {
 
     this.getChannels = this.getChannels.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.loadDefault = this.loadDefault.bind(this);
-
-    this.defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
   }
 
   getChannels(channelsToDisplay) {
     const baseUrl = 'https://wind-bow.gomix.me/twitch-api';
+    const self = this;
 
     let channels = [];
     let streams = [];
@@ -72,6 +70,7 @@ class App extends Component {
           });
           channels.push(channelObj);
         }
+        self.setState({ channels, streams });
       });
     }
 
@@ -89,16 +88,17 @@ class App extends Component {
         console.log('invalid data input');
       }
     }
-    this.setState({ channels, streams });
-  }
-
-  loadDefault() {
-    this.getChannels(this.defaultChannels);
   }
 
   handleUpdate(tab) {
     if (tab !== this.state.selectedTab) {
       this.setState({ selectedTab: tab });
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.selectedTab.length === 0) {
+      this.setState({ selectedTab: 'All' });
     }
   }
 
@@ -120,7 +120,6 @@ class App extends Component {
           <div className="channels">
             <Channels
               getChannels={this.getChannels}
-              loadDefault={this.loadDefault}
               selectedTab={this.state.selectedTab}
               channels={this.state.channels}
             />
