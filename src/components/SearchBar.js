@@ -31,7 +31,7 @@ class SearchBar extends React.Component {
 
   searchChannels() {
     const self = this;
-    const url = BASE_URL + this.state.inputValue;
+    const url = BASE_URL + encodeURIComponent(this.state.inputValue);
 
     if (this.state.inputValue !== '') {
       axios.get(url, {
@@ -63,6 +63,8 @@ class SearchBar extends React.Component {
           dataSource={this.state.dataSource}
           onUpdateInput={this.onUpdateInput}
           onNewRequest={() => this.getChannels(this.state.dataSource)}
+          filter={AutoComplete.fuzzyFilter}
+          maxSearchResults={20}
           fullWidth={true}
         />
       </div>

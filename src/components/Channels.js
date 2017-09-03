@@ -7,6 +7,7 @@ class Channels extends React.Component {
       const defaultChannels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "habathcx", "RobotCaleb", "noobs2ninjas"];
       this.props.getChannels(defaultChannels);
     }
+    // should probably check and update channel statuses here
   }
 
   render() {

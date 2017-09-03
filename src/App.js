@@ -67,10 +67,10 @@ class App extends Component {
                 channelObj.channelStatus = 'Offline'
               }
             }
+            channels.push(channelObj);
+            self.setState({ channels, streams });
           });
-          channels.push(channelObj);
         }
-        self.setState({ channels, streams });
       });
     }
 
@@ -85,7 +85,7 @@ class App extends Component {
         getChannelData(channelsToDisplay);
       }
       else {
-        console.log('invalid data input');
+        console.log('invalid request');
       }
     }
   }
@@ -107,10 +107,7 @@ class App extends Component {
       <div className="App">
         <AppBar title="Twitch TV Stream" />
         <div className="search-bar">
-          <SearchBar
-            getChannels={this.getChannels}
-            selectedTab={this.selectedTab}
-          />
+          <SearchBar getChannels={this.getChannels} />
         </div>
         <div className="App-Content">
           <TabBar
